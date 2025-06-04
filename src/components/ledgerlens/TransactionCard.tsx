@@ -215,7 +215,8 @@ export function TransactionCard({
       }`}
       style={{
         transform: `translateX(${dragDistance}px)`,
-        touchAction: 'pan-y'
+        touchAction: 'pan-y',
+        userSelect: 'none'
       }}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
@@ -246,24 +247,23 @@ export function TransactionCard({
       )}
 
       <div className="space-y-4">
-        <div className="flex justify-between items-start">
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900">
-              {transaction.description}
-            </h3>
+        <div className="flex flex-col">
+          <h3 className="text-lg font-semibold text-gray-900 truncate">
+            {transaction.description}
+          </h3>
+          <div className="flex justify-between items-center mt-2">
             <p className="text-sm text-gray-500">
-              {transaction.mode} {transaction.debit_amount > 0 ? 'To: ' : 'From: '}{transaction.name} on {transaction.date}
+              {transaction.mode ? `${transaction.mode} ${transaction.debit_amount > 0 ? 'To: ' : 'From: '}${transaction.name} on ` : ''}{transaction.date}
             </p>
-          </div>
-          <div className="text-right">
-            <div className="text-lg font-semibold text-gray-900">
-              {transaction.debit_amount > 0 ? (
-                <span className="text-red-600">-₹{transaction.debit_amount.toFixed(2)}</span>
-              ) : (
-                <span className="text-green-600">+₹{transaction.credit_amount.toFixed(2)}</span>
-              )}
+            <div className="text-right">
+              <div className="text-lg font-semibold text-gray-900">
+                {transaction.debit_amount > 0 ? (
+                  <span className="text-red-600">-₹{transaction.debit_amount.toFixed(2)}</span>
+                ) : (
+                  <span className="text-green-600">+₹{transaction.credit_amount.toFixed(2)}</span>
+                )}
+              </div>
             </div>
-            <p className="text-sm text-gray-500">{transaction.mode}</p>
           </div>
         </div>
 

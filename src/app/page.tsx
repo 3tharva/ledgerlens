@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2, ListX, UploadCloud, CheckSquare, CheckCircle, ArrowRight, ArrowLeft, ArrowUpRight } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
+import { CategoryRulesManager } from "@/components/ledgerlens/CategoryRulesManager";
 
 export default function LedgerLensPage() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -139,20 +140,23 @@ export default function LedgerLensPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-slate-200">
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-slate-200">
       <div className="container mx-auto p-4 sm:p-6 lg:p-8">
         <header className="mb-12 text-center">
-          <h1 className="font-headline text-6xl sm:text-7xl font-bold text-[#b5838d] mb-4">
+          <h1 className="font-headline text-6xl sm:text-7xl font-bold bg-gradient-to-r from-[#e0aaff] to-[#b88cff] bg-clip-text text-transparent mb-4">
             LedgerLens
           </h1>
+          <p className="text-lg text-slate-400 max-w-2xl mx-auto">
+            Smart transaction categorization powered by AI. Streamline your financial management with ease.
+          </p>
         </header>
 
         <div className="max-w-4xl mx-auto">
-          <div className="mb-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="mb-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Button
               onClick={handleProcessNewStatement}
               disabled={isProcessing || isLoading}
-              className="w-full h-12 px-6 rounded-full bg-gradient-to-r from-[#e0aaff] to-[#b88cff] text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center"
+              className="w-full h-14 px-6 rounded-xl bg-gradient-to-r from-[#e0aaff] to-[#b88cff] text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isProcessing ? (
                 <Loader2 className="mr-2 h-5 w-5 animate-spin" />
@@ -165,32 +169,33 @@ export default function LedgerLensPage() {
             <Button
               onClick={loadTransactions}
               disabled={isLoading || isProcessing}
-              className="w-full h-12 px-6 rounded-full bg-gradient-to-r from-[#e0aaff] to-[#b88cff] text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center"
+              className="w-full h-14 px-6 rounded-xl bg-gradient-to-r from-[#e0aaff] to-[#b88cff] text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Loader2 className={cn("mr-2 h-5 w-5", isLoading && "animate-spin")} />
               Refresh Transactions
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
+          </div>
+
+          <div className="mb-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Button
               onClick={handleSubmitAllCategories}
               disabled={categorizedTransactions.length === 0}
-              className={cn(
-                "w-full h-12 px-6 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center",
-                categorizedTransactions.length > 0
-                  ? "bg-gradient-to-r from-[#e0aaff] to-[#b88cff] text-white"
-                  : "bg-gray-700 text-gray-400 cursor-not-allowed"
-              )}
+              className="w-full h-14 px-6 rounded-xl bg-gradient-to-r from-[#e0aaff] to-[#b88cff] text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <CheckSquare className="mr-2 h-5 w-5" />
               Done ({categorizedTransactions.length})
               {categorizedTransactions.length > 0 && <ArrowRight className="ml-2 h-5 w-5" />}
             </Button>
+            <div className="w-full">
+              <CategoryRulesManager />
+            </div>
           </div>
 
           <div className="relative">
             {isLoading ? (
               <div className="space-y-4">
-                <Card className="shadow-xl border-0 bg-white/80 backdrop-blur-sm">
+                <Card className="shadow-xl border-0 bg-white/10 backdrop-blur-sm">
                   <CardHeader>
                     <Skeleton className="h-6 w-3/4 mb-2" />
                     <Skeleton className="h-4 w-1/4" />
@@ -218,18 +223,18 @@ export default function LedgerLensPage() {
                 </div>
               </div>
             ) : (
-              <Card className="shadow-xl border-0 bg-gray-800/80 backdrop-blur-sm text-center py-16 text-slate-200">
+              <Card className="shadow-xl border-0 bg-gray-800/40 backdrop-blur-sm text-center py-16 text-slate-200">
                 <CardContent className="flex flex-col items-center justify-center">
-                  <div className="bg-gray-700 rounded-full p-4 mb-6">
+                  <div className="bg-gray-700/50 rounded-full p-4 mb-6">
                     <ListX className="h-12 w-12 text-gray-400" />
                   </div>
                   <h2 className="text-2xl font-semibold text-slate-100 mb-3">No Transactions to Categorize</h2>
-                  <p className="text-slate-400 max-w-sm">
+                  <p className="text-slate-400 max-w-sm mb-6">
                     Click "Refresh Transactions" to load new transactions for categorization.
                   </p>
                   <Button
                     onClick={loadTransactions}
-                    className="mt-6 bg-gradient-to-r from-[#e0aaff] to-[#b88cff] text-white font-semibold rounded-full px-6 h-12"
+                    className="bg-gradient-to-r from-[#e0aaff] to-[#b88cff] text-white font-semibold rounded-xl px-6 h-12 hover:scale-[1.02] transition-transform"
                   >
                     <ArrowUpRight className="mr-2 h-4 w-4" />
                     Load Transactions
@@ -241,7 +246,7 @@ export default function LedgerLensPage() {
           </div>
 
           {categorizedTransactions.length > 0 && (
-            <div className="mt-8 p-4 bg-gray-800/80 backdrop-blur-sm rounded-lg shadow-lg border border-gray-700 text-slate-200">
+            <div className="mt-8 p-6 bg-gray-800/40 backdrop-blur-sm rounded-xl shadow-lg border border-gray-700/50 text-slate-200">
               <h3 className="text-lg font-semibold text-slate-100 mb-2">
                 Categorized Transactions ({categorizedTransactions.length})
               </h3>
@@ -251,9 +256,9 @@ export default function LedgerLensPage() {
             </div>
           )}
 
-          {/* Optional: Add UserGuide or similar section if needed, styled for dark theme */}
-          {/* <UserGuide /> */}
-
+          <div className="mt-12">
+            <UserGuide />
+          </div>
         </div>
       </div>
     </div>
