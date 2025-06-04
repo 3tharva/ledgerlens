@@ -251,7 +251,9 @@ export function TransactionCard({
             <h3 className="text-lg font-semibold text-gray-900">
               {transaction.description}
             </h3>
-            <p className="text-sm text-gray-500">{transaction.date}</p>
+            <p className="text-sm text-gray-500">
+              {transaction.mode} {transaction.debit_amount > 0 ? 'To: ' : 'From: '}{transaction.name} on {transaction.date}
+            </p>
           </div>
           <div className="text-right">
             <div className="text-lg font-semibold text-gray-900">

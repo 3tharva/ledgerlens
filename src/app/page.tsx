@@ -139,15 +139,12 @@ export default function LedgerLensPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100">
+    <div className="min-h-screen bg-black text-slate-200">
       <div className="container mx-auto p-4 sm:p-6 lg:p-8">
         <header className="mb-12 text-center">
-          <h1 className="font-headline text-5xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-4">
+          <h1 className="font-headline text-6xl sm:text-7xl font-bold text-[#b5838d] mb-4">
             LedgerLens
           </h1>
-          <p className="text-slate-600 text-lg max-w-2xl mx-auto">
-            Swipe right to categorize, left to skip. Your financial data, simplified.
-          </p>
         </header>
 
         <div className="max-w-4xl mx-auto">
@@ -155,7 +152,7 @@ export default function LedgerLensPage() {
             <Button
               onClick={handleProcessNewStatement}
               disabled={isProcessing || isLoading}
-              className="bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white h-12 shadow-lg hover:shadow-xl transition-all duration-200"
+              className="w-full h-12 px-6 rounded-full bg-gradient-to-r from-[#e0aaff] to-[#b88cff] text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center"
             >
               {isProcessing ? (
                 <Loader2 className="mr-2 h-5 w-5 animate-spin" />
@@ -163,27 +160,30 @@ export default function LedgerLensPage() {
                 <UploadCloud className="mr-2 h-5 w-5" />
               )}
               Process New Statement
+              <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
             <Button
               onClick={loadTransactions}
               disabled={isLoading || isProcessing}
-              className="bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 h-12 shadow-lg hover:shadow-xl transition-all duration-200"
+              className="w-full h-12 px-6 rounded-full bg-gradient-to-r from-[#e0aaff] to-[#b88cff] text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center"
             >
               <Loader2 className={cn("mr-2 h-5 w-5", isLoading && "animate-spin")} />
               Refresh Transactions
+              <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
             <Button
               onClick={handleSubmitAllCategories}
               disabled={categorizedTransactions.length === 0}
               className={cn(
-                "h-12 shadow-lg hover:shadow-xl transition-all duration-200",
+                "w-full h-12 px-6 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center",
                 categorizedTransactions.length > 0
-                  ? "bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-white"
-                  : "bg-slate-100 text-slate-400 cursor-not-allowed"
+                  ? "bg-gradient-to-r from-[#e0aaff] to-[#b88cff] text-white"
+                  : "bg-gray-700 text-gray-400 cursor-not-allowed"
               )}
             >
               <CheckSquare className="mr-2 h-5 w-5" />
               Done ({categorizedTransactions.length})
+              {categorizedTransactions.length > 0 && <ArrowRight className="ml-2 h-5 w-5" />}
             </Button>
           </div>
 
@@ -207,12 +207,6 @@ export default function LedgerLensPage() {
               </div>
             ) : transactions.length > 0 ? (
               <div className="relative">
-                <div className="absolute -left-4 top-1/2 -translate-y-1/2 text-slate-400">
-                  <ArrowLeft className="h-8 w-8" />
-                </div>
-                <div className="absolute -right-4 top-1/2 -translate-y-1/2 text-slate-400">
-                  <ArrowRight className="h-8 w-8" />
-                </div>
                 <div className="w-full max-w-2xl mx-auto">
                   <TransactionCard
                     key={transactions[0].row_number}
@@ -224,21 +218,22 @@ export default function LedgerLensPage() {
                 </div>
               </div>
             ) : (
-              <Card className="shadow-xl border-0 bg-white/80 backdrop-blur-sm text-center py-16">
+              <Card className="shadow-xl border-0 bg-gray-800/80 backdrop-blur-sm text-center py-16 text-slate-200">
                 <CardContent className="flex flex-col items-center justify-center">
-                  <div className="bg-slate-100 rounded-full p-4 mb-6">
-                    <ListX className="h-12 w-12 text-slate-400" />
+                  <div className="bg-gray-700 rounded-full p-4 mb-6">
+                    <ListX className="h-12 w-12 text-gray-400" />
                   </div>
-                  <h2 className="text-2xl font-semibold text-slate-700 mb-3">No Transactions to Categorize</h2>
-                  <p className="text-slate-500 max-w-sm">
+                  <h2 className="text-2xl font-semibold text-slate-100 mb-3">No Transactions to Categorize</h2>
+                  <p className="text-slate-400 max-w-sm">
                     Click "Refresh Transactions" to load new transactions for categorization.
                   </p>
                   <Button
                     onClick={loadTransactions}
-                    className="mt-6 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white"
+                    className="mt-6 bg-gradient-to-r from-[#e0aaff] to-[#b88cff] text-white font-semibold rounded-full px-6 h-12"
                   >
                     <ArrowUpRight className="mr-2 h-4 w-4" />
                     Load Transactions
+                    <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </CardContent>
               </Card>
@@ -246,15 +241,19 @@ export default function LedgerLensPage() {
           </div>
 
           {categorizedTransactions.length > 0 && (
-            <div className="mt-8 p-4 bg-white/80 backdrop-blur-sm rounded-lg shadow-lg border border-slate-200">
-              <h3 className="text-lg font-semibold text-slate-700 mb-2">
+            <div className="mt-8 p-4 bg-gray-800/80 backdrop-blur-sm rounded-lg shadow-lg border border-gray-700 text-slate-200">
+              <h3 className="text-lg font-semibold text-slate-100 mb-2">
                 Categorized Transactions ({categorizedTransactions.length})
               </h3>
-              <p className="text-slate-500 text-sm">
+              <p className="text-slate-400 text-sm">
                 Click "Done" to save all categorized transactions.
               </p>
             </div>
           )}
+
+          {/* Optional: Add UserGuide or similar section if needed, styled for dark theme */}
+          {/* <UserGuide /> */}
+
         </div>
       </div>
     </div>
