@@ -1,4 +1,4 @@
-export const API_BASE_URL = 'https://398f-106-219-149-133.ngrok-free.app/webhook-test';
+export const API_BASE_URL = 'https://398f-106-219-149-133.ngrok-free.app/webhook';
 
 export const API_ENDPOINTS = {
   GET_TRANSACTIONS: `${API_BASE_URL}/getData`,
