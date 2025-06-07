@@ -4,19 +4,19 @@ import type { Transaction, Category } from "@/types";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-import { TransactionCard } from "@/components/ledgerlens/TransactionCard";
-import { UserGuide } from "@/components/ledgerlens/UserGuide";
+import { TransactionCard } from "@/components/ledgerpoint/TransactionCard";
+import { UserGuide } from "@/components/ledgerpoint/UserGuide";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, ListX, UploadCloud, CheckSquare, CheckCircle, ArrowRight, ArrowLeft, ArrowUpRight } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
-import { CategoryRulesManager } from "@/components/ledgerlens/CategoryRulesManager";
-import { TransactionAnalytics } from "@/components/ledgerlens/TransactionAnalytics";
+import { CategoryRulesManager } from "@/components/ledgerpoint/CategoryRulesManager";
+import { TransactionAnalytics } from "@/components/ledgerpoint/TransactionAnalytics";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { API_ENDPOINTS, apiFetch, getUncategorizedTransactions, processNewStatement, updateCategorizedTransactions } from "@/config/api";
 
-export default function LedgerLensPage() {
+export default function LedgerPointPage() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [categorizedTransactions, setCategorizedTransactions] = useState<Transaction[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -100,12 +100,12 @@ export default function LedgerLensPage() {
     }
 
     try {
-      const response = await fetch(API_ENDPOINTS.SAVE_URL, {
+      const response = await apiFetch(API_ENDPOINTS.UPDATE_CATEGORIZED_TRANSACTIONS, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ url }),
+        body: JSON.stringify({ transactions: categorizedTransactions }),
       });
 
       if (!response.ok) {
@@ -168,7 +168,7 @@ export default function LedgerLensPage() {
       <div className="container mx-auto p-4 sm:p-6 lg:p-8">
         <header className="mb-12 text-center">
           <h1 className="font-headline text-6xl sm:text-7xl font-bold bg-gradient-to-r from-[#7B61FF] to-[#00C9FF] bg-clip-text text-transparent mb-4 tracking-wide">
-            LedgerLens
+            LedgerPoint
           </h1>
           <p className="text-lg text-slate-400 max-w-2xl mx-auto font-light">
             Smart transaction categorization powered by AI. Streamline your financial management with ease.

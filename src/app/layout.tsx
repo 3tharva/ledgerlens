@@ -3,7 +3,7 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster"; // Ensure Toaster is globally available if needed, or move to client component
 
 export const metadata: Metadata = {
-  title: 'LedgerLens',
+  title: 'LedgerPoint',
   description: 'Smart Transaction Categorization',
 };
 

@@ -1,4 +1,4 @@
-# **App Name**: LedgerLens
+# **App Name**: LedgerPoint
 
 ## Core Features:
 

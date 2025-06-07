@@ -6,7 +6,7 @@ export function UserGuide() {
     <Card className="shadow-xl border-0 bg-gray-800/40 backdrop-blur-sm">
       <CardHeader>
         <CardTitle className="font-headline text-2xl bg-gradient-to-r from-[#e0aaff] to-[#b88cff] bg-clip-text text-transparent">
-          Welcome to LedgerLens!
+          Welcome to LedgerPoint!
         </CardTitle>
         <CardDescription className="text-slate-400">
           Streamline your transaction categorization with a simple swipe.
