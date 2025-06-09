@@ -7,10 +7,9 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { TransactionCard } from "@/components/ledgerpoint/TransactionCard";
 import { UserGuide } from "@/components/ledgerpoint/UserGuide";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, ListX, UploadCloud, CheckSquare, CheckCircle, ArrowRight, ArrowLeft, ArrowUpRight, X } from "lucide-react";
+import { Loader2, ListX, UploadCloud, CheckSquare, CheckCircle, ArrowRight, ArrowLeft, ArrowUpRight, X, Save, Edit3 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
-import { TransactionAnalytics } from "@/components/ledgerpoint/TransactionAnalytics";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { API_ENDPOINTS, apiFetch, getUncategorizedTransactions, processNewStatement, updateCategorizedTransactions } from "@/config/api";
@@ -18,7 +17,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { CATEGORIES, SUBCATEGORIES } from "@/types";
 
-export default function LedgerPointPage() {
+export default function ledgerpointPage() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [categorizedTransactions, setCategorizedTransactions] = useState<Transaction[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -400,11 +399,11 @@ export default function LedgerPointPage() {
 
       <div className="max-w-7xl mx-auto space-y-8">
         <header className="mb-12 text-center">
-          <h1 className="font-headline text-6xl sm:text-7xl font-bold bg-gradient-to-r from-[#7B61FF] to-[#00C9FF] bg-clip-text text-transparent mb-4 tracking-wide">
-            LedgerPoint
+          <h1 className="font-headline text-6xl sm:text-7xl font-bold text-[#326DEC] mb-4 tracking-wide">
+            LedgerLens
           </h1>
-          <p className="text-lg text-slate-400 max-w-2xl mx-auto font-light">
-            Smart transaction categorization powered by AI. Streamline your financial management with ease.
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto font-light">
+            Effortlessly categorize and manage your bank transactions with AI-powered insights
           </p>
         </header>
 
@@ -413,7 +412,7 @@ export default function LedgerPointPage() {
             <Button
               onClick={handleProcessNewStatement}
               disabled={isProcessing || isLoading}
-              className="w-full h-14 px-6 rounded-lg bg-gradient-to-r from-[#7B61FF] to-[#00C9FF] text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-[#7B61FF]/20"
+              className="w-full h-14 px-6 rounded-lg bg-[#326DEC] text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-[#326DEC]/20"
             >
               {isProcessing ? (
                 <Loader2 className="mr-2 h-5 w-5 animate-spin" />
@@ -426,7 +425,7 @@ export default function LedgerPointPage() {
             <Button
               onClick={loadTransactions}
               disabled={isLoading || isProcessing}
-              className="w-full h-14 px-6 rounded-lg bg-gradient-to-r from-[#7B61FF] to-[#00C9FF] text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-[#7B61FF]/20"
+              className="w-full h-14 px-6 rounded-lg bg-[#326DEC] text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-[#326DEC]/20"
             >
               <Loader2 className={cn("mr-2 h-5 w-5", isLoading && "animate-spin")} />
               Load Uncategorised Transactions
@@ -437,7 +436,7 @@ export default function LedgerPointPage() {
                 setIsDialogOpen(true);
                 loadAllTransactions();
               }}
-              className="w-full h-14 px-6 rounded-lg bg-gradient-to-r from-[#7B61FF] to-[#00C9FF] text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-[#7B61FF]/20"
+              className="w-full h-14 px-6 rounded-lg bg-[#326DEC] text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-[#326DEC]/20"
             >
               <ListX className="mr-2 h-5 w-5" />
               View All Transactions
@@ -446,27 +445,34 @@ export default function LedgerPointPage() {
           </div>
 
           <div className="mb-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="flex items-center justify-center p-4 rounded-lg bg-gray-800/30 backdrop-blur-sm border border-gray-300/30">
+            <div className="flex items-center justify-center p-4 rounded-lg bg-white shadow-md border border-gray-200">
               <div className="flex items-center space-x-3">
                 <div className="bg-[#7B61FF]/20 p-2 rounded-full">
-                  <CheckCircle className="h-5 w-5 text-[#7B61FF]" />
+                  <CheckCircle className="h-5 w-5 text-[#326DEC]" />
                 </div>
                 <div>
-                  <span className="text-sm text-slate-400">Categorized</span>
-                  <p className="text-lg font-semibold text-slate-200">{categorizedTransactions.length}</p>
+                  <span className="text-sm text-gray-600">Categorized</span>
+                  <p className="text-lg font-semibold text-gray-900">{categorizedTransactions.length}</p>
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center justify-center p-4 rounded-lg bg-white shadow-md border border-gray-200">
+              <div className="flex items-center space-x-3">
+                <div className="bg-[#7B61FF]/20 p-2 rounded-full">
+                  <ListX className="h-5 w-5 text-[#326DEC]" />
+                </div>
+                <div>
+                  <span className="text-sm text-gray-600">Uncategorized</span>
+                  <p className="text-lg font-semibold text-gray-900">{transactions.length}</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="mb-8">
-            <TransactionAnalytics />
-          </div>
-
           <div className="relative">
             {isLoading ? (
               <div className="space-y-4">
-                <Card className="shadow-xl border-0 bg-gray-800/30 backdrop-blur-sm">
+                <Card className="shadow-md border border-gray-200 bg-white">
                   <CardHeader>
                     <Skeleton className="h-6 w-3/4 mb-2" />
                     <Skeleton className="h-4 w-1/4" />
@@ -494,13 +500,13 @@ export default function LedgerPointPage() {
                 </div>
               </div>
             ) : (
-              <Card className="shadow-xl border-0 bg-gray-800/30 backdrop-blur-sm text-center py-16 text-slate-200">
+              <Card className="shadow-md border border-gray-200 bg-white text-center py-16 text-gray-800">
                 <CardContent className="flex flex-col items-center justify-center">
                   <div className="bg-[#7B61FF]/20 rounded-full p-4 mb-6">
-                    <ListX className="h-12 w-12 text-[#7B61FF]" />
+                    <ListX className="h-12 w-12 text-[#326DEC]" />
                   </div>
-                  <h2 className="text-2xl font-semibold text-slate-100 mb-3">No Transactions to Categorize</h2>
-                  <p className="text-slate-400 max-w-sm mb-6">
+                  <h2 className="text-2xl font-semibold text-gray-900 mb-3">No Transactions to Categorize</h2>
+                  <p className="text-gray-600 max-w-sm mb-6">
                     Click "Load Uncategorised Transactions" above to load new transactions for categorization.
                   </p>
                 </CardContent>
@@ -509,19 +515,19 @@ export default function LedgerPointPage() {
           </div>
 
           {categorizedTransactions.length > 0 && (
-            <div className="mt-8 p-6 bg-gray-800/30 backdrop-blur-sm rounded-lg shadow-lg border border-gray-700/30 text-slate-200">
+            <div className="mt-8 p-6 bg-white shadow-md rounded-lg border border-gray-200 text-gray-800">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-lg font-semibold text-slate-100 mb-1">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-1">
                     Ready to Save
                   </h3>
-                  <p className="text-slate-400 text-sm">
+                  <p className="text-gray-600 text-sm">
                     {categorizedTransactions.length} transactions categorized
                   </p>
                 </div>
                 <Button
                   onClick={handleSubmitAllCategories}
-                  className="h-12 px-6 rounded-lg bg-gradient-to-r from-[#7B61FF] to-[#00C9FF] text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center hover:scale-[1.02] hover:shadow-[#7B61FF]/20"
+                  className="h-12 px-6 rounded-lg bg-[#326DEC] text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center hover:scale-[1.02] hover:shadow-[#326DEC]/20"
                 >
                   <CheckSquare className="mr-2 h-5 w-5" />
                   Save Changes
@@ -536,36 +542,36 @@ export default function LedgerPointPage() {
           </div>
 
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto bg-[#1A1D24] border-gray-700/30">
+            <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto bg-white border-gray-200">
               <DialogHeader>
-                <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-[#7B61FF] to-[#00C9FF] bg-clip-text text-transparent">
+                <DialogTitle className="text-2xl font-bold text-[#326DEC]">
                   All Transactions
                 </DialogTitle>
               </DialogHeader>
 
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <h2 className="text-xl font-semibold text-slate-200">All Transactions</h2>
+                  <h2 className="text-xl font-semibold text-gray-900">All Transactions</h2>
                   <Button 
                     onClick={handleSaveCategories}
                     disabled={Object.keys(editedTransactions).length === 0}
-                    className="bg-[#7B61FF] hover:bg-[#6B51EF] text-white"
+                    className="bg-[#326DEC] hover:bg-[#2A5BCB] text-white"
                   >
                     Save Changes
                   </Button>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   <div className="space-y-2">
-                    <Label className="text-slate-200">Month</Label>
+                    <Label className="text-gray-800">Month</Label>
                     <Select
                       value={selectedMonth}
                       onValueChange={setSelectedMonth}
                     >
-                      <SelectTrigger className="w-full bg-transparent border-gray-700/30 text-slate-200 hover:bg-gray-700/30">
+                      <SelectTrigger className="w-full bg-white border-gray-200 text-gray-800 hover:bg-gray-100">
                         <SelectValue placeholder="Select month" />
                       </SelectTrigger>
                       <SelectContent 
-                        className="bg-gray-800 border-gray-700/30 max-h-[200px] overflow-y-auto"
+                        className="bg-white border-gray-200 max-h-[200px] overflow-y-auto"
                         position="popper"
                         side="bottom"
                         align="start"
@@ -582,16 +588,16 @@ export default function LedgerPointPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label className="text-slate-200">Category</Label>
+                    <Label className="text-gray-800">Category</Label>
                     <Select
                       value={selectedCategory}
                       onValueChange={setSelectedCategory}
                     >
-                      <SelectTrigger className="w-full bg-transparent border-gray-700/30 text-slate-200 hover:bg-gray-700/30">
+                      <SelectTrigger className="w-full bg-white border-gray-200 text-gray-800 hover:bg-gray-100">
                         <SelectValue placeholder="Select category" />
                       </SelectTrigger>
                       <SelectContent 
-                        className="bg-gray-800 border-gray-700/30 max-h-[200px] overflow-y-auto"
+                        className="bg-white border-gray-200 max-h-[200px] overflow-y-auto"
                         position="popper"
                         side="bottom"
                         align="start"
@@ -608,16 +614,16 @@ export default function LedgerPointPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label className="text-slate-200">Mode</Label>
+                    <Label className="text-gray-800">Mode</Label>
                     <Select
                       value={selectedMode}
                       onValueChange={setSelectedMode}
                     >
-                      <SelectTrigger className="w-full bg-transparent border-gray-700/30 text-slate-200 hover:bg-gray-700/30">
+                      <SelectTrigger className="w-full bg-white border-gray-200 text-gray-800 hover:bg-gray-100">
                         <SelectValue placeholder="Select mode" />
                       </SelectTrigger>
                       <SelectContent 
-                        className="bg-gray-800 border-gray-700/30 max-h-[200px] overflow-y-auto"
+                        className="bg-white border-gray-200 max-h-[200px] overflow-y-auto"
                         position="popper"
                         side="bottom"
                         align="start"
@@ -634,82 +640,73 @@ export default function LedgerPointPage() {
                   </div>
 
             <div className="space-y-2">
-                    <Label className="text-slate-200">Date Range</Label>
+                    <Label className="text-gray-800">Date Range</Label>
                     <div className="grid grid-cols-2 gap-2">
                       <Input
                         type="date"
                         value={startDate}
                         onChange={(e) => setStartDate(e.target.value)}
-                        className="bg-transparent border-gray-700/30 text-slate-200 hover:bg-gray-700/30"
+                        className="bg-white border-gray-200 text-gray-800 hover:bg-gray-100"
                       />
                 <Input
                         type="date"
                         value={endDate}
                         onChange={(e) => setEndDate(e.target.value)}
-                        className="bg-transparent border-gray-700/30 text-slate-200 hover:bg-gray-700/30"
+                        className="bg-white border-gray-200 text-gray-800 hover:bg-gray-100"
                       />
                     </div>
                   </div>
                 </div>
-                <div className="border border-gray-700/30 rounded-lg overflow-hidden">
+                <div className="border border-gray-200 rounded-lg overflow-hidden">
                   <div className="overflow-x-auto">
                     <table className="w-full">
                       <thead>
-                        <tr className="border-b border-gray-700/30">
-                          <th className="px-4 py-2 text-left text-sm font-semibold text-slate-200">Date</th>
-                          <th className="px-4 py-2 text-left text-sm font-semibold text-slate-200">Description</th>
-                          <th className="px-4 py-2 text-left text-sm font-semibold text-slate-200">Mode</th>
-                          <th className="px-4 py-2 text-left text-sm font-semibold text-slate-200">Category</th>
-                          <th className="px-4 py-2 text-left text-sm font-semibold text-slate-200">Subcategory</th>
-                          <th className="px-4 py-2 text-right text-sm font-semibold text-slate-200">Amount</th>
-                          <th className="px-4 py-2 text-center text-sm font-semibold text-slate-200">Actions</th>
+                        <tr className="border-b border-gray-200 bg-white">
+                          <th className="px-4 py-2 text-left text-sm font-semibold text-gray-900">Date</th>
+                          <th className="px-4 py-2 text-left text-sm font-semibold text-gray-900">Description</th>
+                          <th className="px-4 py-2 text-left text-sm font-semibold text-gray-900">Mode</th>
+                          <th className="px-4 py-2 text-left text-sm font-semibold text-gray-900">Category</th>
+                          <th className="px-4 py-2 text-left text-sm font-semibold text-gray-900">Subcategory</th>
+                          <th className="px-4 py-2 text-right text-sm font-semibold text-gray-900">Amount</th>
+                          <th className="px-4 py-2 text-center text-sm font-semibold text-gray-900">Actions</th>
                         </tr>
                       </thead>
                       <tbody>
                         {isLoadingAll ? (
                           <tr>
-                            <td colSpan={7} className="px-4 py-8 text-center text-slate-400">
+                            <td colSpan={7} className="px-4 py-8 text-center text-gray-600">
                               <div className="flex items-center justify-center space-x-2">
                                 <Loader2 className="h-5 w-5 animate-spin" />
                                 <span>Loading transactions...</span>
                               </div>
                             </td>
                           </tr>
-                        ) : getFilteredTransactions().length === 0 ? (
-                          <tr>
-                            <td colSpan={7} className="px-4 py-8 text-center text-slate-400">
-                              No transactions found
-                            </td>
-                          </tr>
                         ) : (
                           getFilteredTransactions().map((transaction) => (
-                            <tr key={transaction.row_number} className="border-b border-gray-700/30 hover:bg-gray-700/30">
-                              <td className="px-4 py-2 text-sm text-slate-200">{transaction.date}</td>
-                              <td className="px-4 py-2 text-sm text-slate-200">{transaction.description}</td>
-                              <td className="px-4 py-2 text-sm text-slate-200">{transaction.mode || '-'}</td>
+                            <tr key={transaction.row_number} className="border-b border-gray-200 hover:bg-gray-100">
+                              <td className="px-4 py-2 text-sm text-gray-800">{transaction.date}</td>
+                              <td className="px-4 py-2 text-sm text-gray-800">{transaction.description}</td>
+                              <td className="px-4 py-2 text-sm text-gray-800">{transaction.mode || '-'}</td>
                               <td className="px-4 py-2 text-sm">
                                 <Select
                                   value={editedTransactions[transaction.row_number]?.category || transaction.category || ''}
                                   onValueChange={(value) => handleCategoryChange(transaction.row_number, value)}
                                 >
-                                  <SelectTrigger className="w-[180px] bg-transparent border-gray-700/30 text-slate-200 hover:bg-gray-700/30">
+                                  <SelectTrigger className="w-[180px] bg-white border-gray-200 text-gray-800 hover:bg-gray-100">
                                     <SelectValue>
                                       {editedTransactions[transaction.row_number]?.category || transaction.category || '-'}
                                     </SelectValue>
                                   </SelectTrigger>
                                   <SelectContent 
-                                    className="bg-gray-800 border-gray-700/30 max-h-[200px] overflow-y-auto"
+                                    className="bg-white border-gray-200 max-h-[200px] overflow-y-auto"
                                     position="popper"
                                     side="bottom"
                                     align="start"
                                     sideOffset={4}
                                   >
+                                    <SelectItem value="-">-</SelectItem>
                                     {CATEGORIES.map((category) => (
-                                      <SelectItem 
-                                        key={category} 
-                                        value={category}
-                                        className="text-slate-200 hover:bg-gray-700/30"
-                                      >
+                                      <SelectItem key={category} value={category}>
                                         {category}
                                       </SelectItem>
                                     ))}
@@ -719,47 +716,61 @@ export default function LedgerPointPage() {
                               <td className="px-4 py-2 text-sm">
                                 <Select
                                   value={editedTransactions[transaction.row_number]?.subcategory || transaction.subcategory || ''}
-                                  onValueChange={(value) => handleSubcategoryChange(transaction.row_number, value)}
+                                  onValueChange={(value) => handleSubcategoryChange(transaction.row_number, value === '-' ? '' : value)}
                                   disabled={!editedTransactions[transaction.row_number]?.category && !transaction.category}
                                 >
-                                  <SelectTrigger className="w-[180px] bg-transparent border-gray-700/30 text-slate-200 hover:bg-gray-700/30">
+                                  <SelectTrigger className="w-[180px] bg-white border-gray-200 text-gray-800 hover:bg-gray-100">
                                     <SelectValue>
                                       {editedTransactions[transaction.row_number]?.subcategory || transaction.subcategory || '-'}
                                     </SelectValue>
                                   </SelectTrigger>
                                   <SelectContent 
-                                    className="bg-gray-800 border-gray-700/30 max-h-[200px] overflow-y-auto"
+                                    className="bg-white border-gray-200 max-h-[200px] overflow-y-auto"
                                     position="popper"
                                     side="bottom"
                                     align="start"
                                     sideOffset={4}
                                   >
-                                    {(editedTransactions[transaction.row_number]?.category || transaction.category) && 
-                                      SUBCATEGORIES[(editedTransactions[transaction.row_number]?.category || transaction.category) as Category]?.map((subcategory) => (
-                                        <SelectItem 
-                                          key={subcategory} 
-                                          value={subcategory}
-                                          className="text-slate-200 hover:bg-gray-700/30"
-                                        >
+                                    <SelectItem value="-">-</SelectItem>
+                                    {(editedTransactions[transaction.row_number]?.category || transaction.category) &&
+                                      SUBCATEGORIES[((editedTransactions[transaction.row_number]?.category || transaction.category) as Category)]?.map((subcategory) => (
+                                        <SelectItem key={subcategory} value={subcategory}>
                                           {subcategory}
                                         </SelectItem>
                                       ))}
                                   </SelectContent>
                                 </Select>
                               </td>
-                              <td className="px-4 py-2 text-sm text-right text-slate-200">
-                                {transaction.debit_amount > 0 
-                                  ? `-₹${transaction.debit_amount.toFixed(2)}` 
-                                  : `+₹${transaction.credit_amount}`}
+                              <td className="px-4 py-2 text-right text-sm text-gray-800">
+                                {(() => {
+                                  const debitAmount = transaction.debit_amount || 0;
+                                  let creditAmountNum = 0;
+                                  if (typeof transaction.credit_amount === 'string' && transaction.credit_amount !== '') {
+                                    creditAmountNum = parseFloat(transaction.credit_amount);
+                                  } else if (typeof transaction.credit_amount === 'number') {
+                                    creditAmountNum = transaction.credit_amount;
+                                  }
+
+                                  const displayAmount = debitAmount > 0 ? debitAmount : creditAmountNum;
+
+                                  if (displayAmount === 0) return '-';
+                                  return `₹${displayAmount.toLocaleString()}`;
+                                })()}
                               </td>
-                              <td className="px-4 py-2 text-sm text-center">
-                                {editedTransactions[transaction.row_number] && (
-                <Button 
+                              <td className="px-4 py-2 text-center">
+                                {editedTransactions[transaction.row_number] ? (
+                                  <Button
                                     onClick={() => handleUpdateTransaction(transaction.row_number)}
-                                    size="sm"
-                                    className="bg-[#7B61FF] hover:bg-[#6B51EF] text-white"
+                                    className="h-8 w-8 p-0 rounded-full bg-[#326DEC] hover:bg-[#2A5BCB] text-white"
                                   >
-                                    Update
+                                    <Save className="h-4 w-4" />
+                                  </Button>
+                                ) : (
+                <Button 
+                                    onClick={() => handleCategoryChange(transaction.row_number, transaction.category || '')}
+                                    className="h-8 w-8 p-0 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700"
+                >
+                                    <Edit3 className="h-4 w-4" />
                 </Button>
                                 )}
                               </td>

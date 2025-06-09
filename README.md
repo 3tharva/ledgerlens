@@ -1,8 +1,8 @@
-# LedgerPoint
+# ledgerpoint
 
-LedgerPoint is a modern web application for smart transaction categorization powered by AI. It helps users streamline their financial management by automatically categorizing bank transactions and providing an intuitive interface for review and customization.
+ledgerpoint is a modern web application for smart transaction categorization powered by AI. It helps users streamline their financial management by automatically categorizing bank transactions and providing an intuitive interface for review and customization.
 
-![LedgerPoint](https://via.placeholder.com/800x400?text=LedgerPoint)
+![ledgerpoint](https://via.placeholder.com/800x400?text=ledgerpoint)
 
 ## Features
 

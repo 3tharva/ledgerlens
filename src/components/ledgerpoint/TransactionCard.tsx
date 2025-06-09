@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useState, useRef } from "react";
-import { CheckCircle, Edit3, Save, XCircle, RotateCcw, ArrowLeftRight, ThumbsUp, ThumbsDown } from "lucide-react";
+import { CheckCircle, Edit3, Save, XCircle, RotateCcw, ArrowLeftRight, ThumbsUp, ThumbsDown, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface TransactionCardProps {
@@ -148,10 +148,16 @@ export function TransactionCard({
                 setEditedSubcategory('');
               }}
             >
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full bg-white border-gray-200 text-gray-800 hover:bg-gray-100">
                 <SelectValue placeholder="Select a category" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent 
+                className="bg-white border-gray-200 max-h-[200px] overflow-y-auto"
+                position="popper"
+                side="bottom"
+                align="start"
+                sideOffset={4}
+              >
                 {CATEGORIES.map((category) => (
                   <SelectItem key={category} value={category}>
                     {category}
@@ -169,10 +175,16 @@ export function TransactionCard({
               onValueChange={(value: string) => setEditedSubcategory(value)}
               disabled={!editedCategory}
             >
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full bg-white border-gray-200 text-gray-800 hover:bg-gray-100">
                 <SelectValue placeholder={editedCategory ? "Select a subcategory" : "Select a category first"} />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent 
+                className="bg-white border-gray-200 max-h-[200px] overflow-y-auto"
+                position="popper"
+                side="bottom"
+                align="start"
+                sideOffset={4}
+              >
                 {editedCategory && SUBCATEGORIES[editedCategory as Category]?.map((subcategory) => (
                   <SelectItem key={subcategory} value={subcategory}>
                     {subcategory}
@@ -185,7 +197,7 @@ export function TransactionCard({
         <div className="flex justify-end space-x-2">
           <button
             onClick={() => setIsEditing(false)}
-            className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500"
+            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500"
           >
             Cancel
           </button>
@@ -194,8 +206,8 @@ export function TransactionCard({
             disabled={!editedCategory}
             className={`px-4 py-2 text-sm font-medium text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
               editedCategory
-                ? 'bg-blue-600 hover:bg-blue-700'
-                : 'bg-gray-400 cursor-not-allowed'
+                ? 'bg-[#326DEC] hover:bg-[#2A5BCB]'
+                : 'bg-gray-200 cursor-not-allowed text-gray-500'
             }`}
           >
             Save
@@ -208,72 +220,80 @@ export function TransactionCard({
   const swipeFeedbackOpacity = Math.min(Math.abs(dragDistance) / SWIPE_THRESHOLD, 1);
 
   return (
-    <div
+    <Card 
       ref={cardRef}
-      className={`relative bg-white rounded-xl shadow-lg p-6 transition-all duration-200 ${
-        isDragging ? 'cursor-grabbing' : 'cursor-grab'
-      }`}
+      className={cn(
+        "relative w-full max-w-2xl mx-auto rounded-xl shadow-lg transition-transform duration-100 ease-out",
+        "border border-gray-200 bg-white",
+        isDragging && "cursor-grabbing",
+        !isDragging && "cursor-grab"
+      )}
       style={{
-        transform: `translateX(${dragDistance}px)`,
-        touchAction: 'pan-y',
-        userSelect: 'none'
+        transform: isDragging ? `translateX(${dragDistance}px)` : undefined,
+        transition: isDragging ? 'none' : 'transform 0.3s ease-out'
       }}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
-      onMouseLeave={handleMouseUp}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
       {/* Swipe feedback overlays */}
-      {isDragging && dragDistance > 20 && (
-        <div 
-          className="absolute inset-0 bg-gradient-to-r from-emerald-500/50 to-green-500/50 backdrop-blur-sm flex items-center justify-start p-4 transition-opacity duration-100"
-          style={{ opacity: swipeFeedbackOpacity }}
-        >
-          <ThumbsUp className="h-8 w-8 text-white" />
-          <span className="ml-2 text-white font-semibold">Accept</span>
+      <div 
+        className={cn(
+          "absolute inset-0 flex items-center justify-center transition-opacity duration-200",
+          dragDirection === 'right' ? 'bg-green-50' : 'bg-blue-50',
+          dragDirection ? 'opacity-100' : 'opacity-0'
+        )}
+        style={{ opacity: swipeFeedbackOpacity }}
+      >
+        {dragDirection === 'right' ? (
+          <ThumbsUp className="h-12 w-12 text-green-600" />
+        ) : dragDirection === 'left' ? (
+          <Edit3 className="h-12 w-12 text-blue-600" />
+        ) : null}
+      </div>
+
+      {isProcessing && (
+        <div className="absolute inset-0 flex items-center justify-center bg-white/70 backdrop-blur-sm z-10 rounded-xl">
+          <Loader2 className="h-10 w-10 animate-spin text-[#326DEC]" />
         </div>
       )}
-      {isDragging && dragDistance < -20 && (
-        <div 
-          className="absolute inset-0 bg-gradient-to-r from-red-500/50 to-rose-500/50 backdrop-blur-sm flex items-center justify-end p-4 transition-opacity duration-100"
-          style={{ opacity: swipeFeedbackOpacity }}
+      
+      <CardHeader className="bg-white/50 backdrop-blur-sm border-b border-gray-200 rounded-t-xl px-6 py-4 flex flex-row items-center justify-between">
+        <div className="text-sm text-gray-600">{transaction.date}</div>
+        <Badge 
+          variant="outline" 
+          className={cn(
+            "px-3 py-1 rounded-full text-xs font-semibold",
+            transaction.debit_amount > 0 ? "bg-red-50 text-red-700 border-red-200" : "bg-green-50 text-green-700 border-green-200"
+          )}
         >
-          <span className="mr-2 text-white font-semibold">Edit</span>
-          <ThumbsDown className="h-8 w-8 text-white" />
+          {transaction.debit_amount > 0 ? "Debit" : "Credit"}
+        </Badge>
+      </CardHeader>
+      <CardContent className="p-6 space-y-4">
+        <div className="flex items-center justify-between">
+          <p className="text-lg font-semibold text-gray-900">{transaction.description}</p>
+          <p className="text-xl font-bold text-gray-900">
+            {transaction.debit_amount > 0 
+              ? `-₹${transaction.debit_amount.toLocaleString()}` 
+              : `+₹${transaction.credit_amount?.toLocaleString()}`}
+          </p>
         </div>
-      )}
-
-      <div className="space-y-4">
-        <div className="flex flex-col">
-          <h3 className="text-lg font-semibold text-gray-900 truncate">
-            {transaction.description}
-          </h3>
-          <div className="flex justify-between items-center mt-2">
-            <p className="text-sm text-gray-500">
-              {transaction.mode ? `${transaction.mode} ${transaction.debit_amount > 0 ? 'To: ' : 'From: '}${transaction.name} on ` : ''}{transaction.date}
-            </p>
-            <div className="text-right">
-              <div className="text-lg font-semibold text-gray-900">
-                {transaction.debit_amount > 0 ? (
-                  <span className="text-red-600">-₹{transaction.debit_amount.toFixed(2)}</span>
-                ) : (
-                  <span className="text-green-600">+₹{transaction.credit_amount.toFixed(2)}</span>
-                )}
-              </div>
-            </div>
-          </div>
+        <div className="text-sm text-gray-600">
+          <p>Mode: {transaction.mode || '-'}</p>
+          <p>Bank: {transaction.name || '-'}</p>
         </div>
 
-        <div className="border-t border-gray-100 pt-4">
+        <div className="border-t border-gray-200 pt-4">
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-gray-700">AI Suggested Category:</span>
               <button
                 onClick={() => setIsEditing(true)}
-                className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-700 hover:bg-indigo-200 transition-colors"
+                className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition-colors"
               >
                 {transaction['ai.Category'] || 'No suggestion'}
                 <Edit3 className="ml-2 h-4 w-4" />
@@ -283,7 +303,7 @@ export function TransactionCard({
               <span className="text-sm font-medium text-gray-700">Subcategory:</span>
               <button
                 onClick={() => setIsEditing(true)}
-                className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-700 hover:bg-green-200 transition-colors"
+                className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-50 text-green-700 hover:bg-green-100 transition-colors"
               >
                 {transaction.subcategory || 'Add subcategory'}
                 <Edit3 className="ml-2 h-4 w-4" />
@@ -291,27 +311,26 @@ export function TransactionCard({
             </div>
           </div>
         </div>
-
-        <div className="flex justify-end space-x-2">
-          <button
-            onClick={() => setIsEditing(true)}
-            className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500"
-          >
-            Edit
-          </button>
-          <button
-            onClick={handleAcceptCategory}
-            disabled={!transaction['ai.Category'] || isProcessing}
-            className={`px-4 py-2 text-sm font-medium text-white rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-              transaction['ai.Category'] && !isProcessing
-                ? 'bg-green-600 hover:bg-green-700 focus:ring-green-500'
-                : 'bg-gray-400 cursor-not-allowed'
-            }`}
-          >
-            {isProcessing ? 'Processing...' : 'Accept'}
-          </button>
-        </div>
-      </div>
-    </div>
+      </CardContent>
+      <CardFooter className="px-6 py-4 flex justify-between bg-white border-t border-gray-200 rounded-b-xl">
+        <Button 
+          onClick={() => setIsEditing(true)}
+          variant="outline"
+          className="text-gray-700 hover:bg-gray-100 border-gray-200"
+          disabled={isProcessing}
+        >
+          <Edit3 className="mr-2 h-5 w-5" />
+          Edit
+        </Button>
+        <Button 
+          onClick={handleAcceptCategory}
+          className="bg-[#326DEC] hover:bg-[#2A5BCB] text-white"
+          disabled={isProcessing}
+        >
+          <CheckCircle className="mr-2 h-5 w-5" />
+          Accept
+        </Button>
+      </CardFooter>
+    </Card>
   );
 }
