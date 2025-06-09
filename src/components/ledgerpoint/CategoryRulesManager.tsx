@@ -8,6 +8,9 @@ import { Plus, Save, X, ArrowRight, ArrowUpDown } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { API_ENDPOINTS, apiFetch } from "@/config/api";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { CATEGORIES } from "@/types";
 
 interface CategoryRule {
   ruleId: number;
@@ -30,6 +33,8 @@ export function CategoryRulesManager() {
   const [isOpen, setIsOpen] = useState(false);
   const [sortField, setSortField] = useState<SortField>('ruleId');
   const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedMode, setSelectedMode] = useState("all");
   const { toast } = useToast();
 
   useEffect(() => {
@@ -131,7 +136,23 @@ export function CategoryRulesManager() {
     }
   };
 
-  const sortedRules = [...rules].sort((a, b) => {
+  const getFilteredRules = () => {
+    return rules.filter(rule => {
+      // Filter by category
+      if (selectedCategory !== "all" && rule.category !== selectedCategory) {
+        return false;
+      }
+
+      // Filter by mode
+      if (selectedMode !== "all" && rule.mode !== selectedMode) {
+        return false;
+      }
+
+      return true;
+    });
+  };
+
+  const sortedRules = [...getFilteredRules()].sort((a, b) => {
     const aValue = a[sortField];
     const bValue = b[sortField];
     
@@ -158,36 +179,105 @@ export function CategoryRulesManager() {
     { key: 'amount_max', label: 'Max Amount' },
     { key: 'category', label: 'Category' },
     { key: 'subcategory', label: 'Subcategory' },
-    { key: 'Categories', label: 'Categories' },
   ];
+
+  // Get unique categories and modes for filters
+  const uniqueCategories = Array.from(new Set(rules.map(r => r.category).filter((c): c is string => Boolean(c))));
+  const uniqueModes = Array.from(new Set(rules.map(r => r.mode).filter((m): m is string => Boolean(m))));
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button 
           variant="outline" 
-          className="w-full h-14 px-6 rounded-lg bg-gray-800/30 backdrop-blur-sm border border-gray-700/30 text-slate-200 font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center hover:scale-[1.02] hover:bg-gray-800/50"
+          className="w-full h-14 px-6 rounded-lg bg-white border border-gray-200 text-gray-800 font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center hover:scale-[1.02] hover:bg-gray-50"
         >
-          <Plus className="mr-2 h-5 w-5 text-[#7B61FF]" />
+          <Plus className="mr-2 h-5 w-5 text-[#326DEC]" />
           Edit Categories
-          <ArrowRight className="ml-2 h-5 w-5 text-[#7B61FF]" />
+          <ArrowRight className="ml-2 h-5 w-5 text-[#326DEC]" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-6xl max-h-[80vh] overflow-y-auto bg-[#1A1D24] border-gray-700/30">
+      <DialogContent className="max-w-6xl max-h-[80vh] overflow-y-auto bg-white border-gray-200">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-[#7B61FF] to-[#00C9FF] bg-clip-text text-transparent">
+          <DialogTitle className="text-2xl font-bold text-[#326DEC]">
             Manage Category Rules
           </DialogTitle>
         </DialogHeader>
+
         <div className="space-y-4">
+          <div className="flex justify-between items-center">
+            <h2 className="text-xl font-semibold text-gray-900">Category Rules</h2>
+            <Button
+              onClick={handleSave}
+              className="bg-[#326DEC] hover:bg-[#2A5BCB] text-white"
+            >
+              <Save className="mr-2 h-4 w-4" />
+              Save Changes
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label className="text-gray-800">Category</Label>
+              <Select
+                value={selectedCategory}
+                onValueChange={setSelectedCategory}
+              >
+                <SelectTrigger className="w-full bg-white border-gray-200 text-gray-800 hover:bg-gray-100">
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+                <SelectContent 
+                  className="bg-white border-gray-200 max-h-[200px] overflow-y-auto"
+                  position="popper"
+                  side="bottom"
+                  align="start"
+                  sideOffset={4}
+                >
+                  <SelectItem value="all">All Categories</SelectItem>
+                  {uniqueCategories.map((category) => (
+                    <SelectItem key={category} value={category}>
+                      {category}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-gray-800">Mode</Label>
+              <Select
+                value={selectedMode}
+                onValueChange={setSelectedMode}
+              >
+                <SelectTrigger className="w-full bg-white border-gray-200 text-gray-800 hover:bg-gray-100">
+                  <SelectValue placeholder="Select mode" />
+                </SelectTrigger>
+                <SelectContent 
+                  className="bg-white border-gray-200 max-h-[200px] overflow-y-auto"
+                  position="popper"
+                  side="bottom"
+                  align="start"
+                  sideOffset={4}
+                >
+                  <SelectItem value="all">All Modes</SelectItem>
+                  {uniqueModes.map((mode) => (
+                    <SelectItem key={mode} value={mode}>
+                      {mode}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
           <div className="overflow-x-auto">
             <table className="w-full border-collapse">
               <thead>
-                <tr className="bg-gray-800/50">
+                <tr className="bg-gray-50">
                   {columns.map((column) => (
                     <th
                       key={column.key}
-                      className="px-4 py-3 text-left text-sm font-semibold text-slate-200 border-b border-gray-700/30 cursor-pointer hover:bg-gray-700/30"
+                      className="px-4 py-3 text-left text-sm font-semibold text-gray-800 border-b border-gray-200 cursor-pointer hover:bg-gray-100"
                       onClick={() => handleSort(column.key)}
                     >
                       <div className="flex items-center gap-2">
@@ -196,14 +286,14 @@ export function CategoryRulesManager() {
                       </div>
                     </th>
                   ))}
-                  <th className="px-4 py-3 text-left text-sm font-semibold text-slate-200 border-b border-gray-700/30">
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-800 border-b border-gray-200">
                     Actions
                   </th>
                 </tr>
               </thead>
               <tbody>
                 {sortedRules.map((rule, index) => (
-                  <tr key={index} className="border-b border-gray-700/30 hover:bg-gray-800/30">
+                  <tr key={index} className="border-b border-gray-200 hover:bg-gray-50">
                     {columns.map((column) => (
                       <td key={column.key} className="px-4 py-3">
                         <TooltipProvider>
@@ -213,7 +303,7 @@ export function CategoryRulesManager() {
                                 <Input
                                   value={rule[column.key] ?? ""}
                                   onChange={(e) => updateRule(index, column.key, e.target.value)}
-                                  className="bg-gray-800/50 border-gray-700/50 text-slate-200 placeholder:text-gray-500 focus:border-[#7B61FF]/50 focus:ring-[#7B61FF]/20 pr-8"
+                                  className="bg-white border-gray-200 text-gray-800 placeholder:text-gray-500 focus:border-[#326DEC] focus:ring-[#326DEC]/20 pr-8"
                                 />
                                 {rule[column.key] && (
                                   <div className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400">
@@ -224,7 +314,7 @@ export function CategoryRulesManager() {
                             </TooltipTrigger>
                             <TooltipContent 
                               side="top" 
-                              className="max-w-[300px] break-words bg-gray-800 text-slate-200 border border-gray-700"
+                              className="max-w-[300px] break-words bg-white text-gray-800 border border-gray-200"
                             >
                               <p>{rule[column.key] || 'Empty'}</p>
                             </TooltipContent>
@@ -237,7 +327,7 @@ export function CategoryRulesManager() {
                         variant="ghost"
                         size="icon"
                         onClick={() => removeRule(index)}
-                        className="text-red-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg"
+                        className="text-red-500 hover:text-red-600 hover:bg-red-50 rounded-lg"
                       >
                         <X className="h-4 w-4" />
                       </Button>
@@ -247,21 +337,14 @@ export function CategoryRulesManager() {
               </tbody>
             </table>
           </div>
-          <div className="flex justify-between">
-            <Button 
-              onClick={addNewRule} 
-              className="h-14 px-6 rounded-lg bg-gray-800/30 backdrop-blur-sm border border-gray-700/30 text-slate-200 font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center hover:scale-[1.02] hover:bg-gray-800/50"
+
+          <div className="flex justify-end">
+            <Button
+              onClick={addNewRule}
+              className="bg-[#326DEC] hover:bg-[#2A5BCB] text-white"
             >
-              <Plus className="mr-2 h-5 w-5 text-[#7B61FF]" />
+              <Plus className="mr-2 h-4 w-4" />
               Add Rule
-            </Button>
-            <Button 
-              onClick={handleSave} 
-              disabled={isLoading} 
-              className="h-14 px-6 rounded-lg bg-gradient-to-r from-[#7B61FF] to-[#00C9FF] text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-[#7B61FF]/20"
-            >
-              <Save className="mr-2 h-5 w-5" />
-              {isLoading ? 'Saving...' : 'Save Changes'}
             </Button>
           </div>
         </div>

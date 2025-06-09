@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { TransactionCard } from "@/components/ledgerpoint/TransactionCard";
 import { UserGuide } from "@/components/ledgerpoint/UserGuide";
+import { CategoryRulesManager } from "@/components/ledgerpoint/CategoryRulesManager";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, ListX, UploadCloud, CheckSquare, CheckCircle, ArrowRight, ArrowLeft, ArrowUpRight, X, Save, Edit3 } from "lucide-react";
+import { Loader2, ListX, UploadCloud, CheckSquare, CheckCircle, ArrowRight, ArrowLeft, ArrowUpRight, X, Save, Edit3, FileUp } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
@@ -89,9 +90,9 @@ export default function ledgerpointPage() {
   };
 
   // Get unique categories, modes, and months for filters
-  const uniqueCategories = Array.from(new Set(allTransactions.map(t => t.category).filter((c): c is string => Boolean(c))));
-  const uniqueModes = Array.from(new Set(allTransactions.map(t => t.mode).filter((m): m is string => Boolean(m))));
-  const uniqueMonths = Array.from(new Set(allTransactions.map(t => getMonthYearFromDate(t.date)))).sort().reverse();
+  const uniqueCategories = Array.from(new Set(allTransactions?.map(t => t.category).filter((c): c is string => Boolean(c)) || []));
+  const uniqueModes = Array.from(new Set(allTransactions?.map(t => t.mode).filter((m): m is string => Boolean(m)) || []));
+  const uniqueMonths = Array.from(new Set(allTransactions?.map(t => getMonthYearFromDate(t.date)) || [])).sort().reverse();
 
   const loadTransactions = async () => {
     setIsLoading(true);
@@ -209,23 +210,23 @@ export default function ledgerpointPage() {
     try {
       const response = await apiFetch(API_ENDPOINTS.GET_TRANSACTIONS);
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error('Failed to fetch transactions');
       }
-      const text = await response.text();
-      if (!text) {
-        setAllTransactions([]);
-        return;
+      const data = await response.json();
+      // Ensure data is an array before setting it
+      if (Array.isArray(data)) {
+        setAllTransactions(data);
+        setIsDialogOpen(true);
+      } else {
+        throw new Error('Invalid response format');
       }
-      const data = JSON.parse(text);
-      setAllTransactions(data);
     } catch (error) {
-      console.error('Error fetching all transactions:', error);
+      console.error('Error fetching transactions:', error);
       toast({
         title: "Error",
-        description: "Failed to fetch transactions. Please try again later.",
+        description: "Failed to fetch transactions. Please try again.",
         variant: "destructive",
       });
-      setAllTransactions([]);
     } finally {
       setIsLoadingAll(false);
     }
@@ -379,10 +380,46 @@ export default function ledgerpointPage() {
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    toast({
-      title: "Info",
-      description: "File upload is not supported for processNewStatement.",
-    });
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsProcessing(true);
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await apiFetch(API_ENDPOINTS.UPLOAD_STATEMENT, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to upload statement');
+      }
+
+      const data = await response.json();
+      // Ensure data is an array before setting it
+      if (Array.isArray(data)) {
+        setAllTransactions(data);
+        toast({
+          title: "Success!",
+          description: "Statement uploaded and processed successfully.",
+        });
+      } else {
+        throw new Error('Invalid response format');
+      }
+    } catch (error) {
+      console.error('Error uploading statement:', error);
+      toast({
+        title: "Error",
+        description: "Failed to upload statement. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsProcessing(false);
+      // Reset the file input
+      e.target.value = '';
+    }
   };
 
   return (
@@ -411,37 +448,84 @@ export default function ledgerpointPage() {
           <div className="mb-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Button
               onClick={handleProcessNewStatement}
-              disabled={isProcessing || isLoading}
-              className="w-full h-14 px-6 rounded-lg bg-[#326DEC] text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-[#326DEC]/20"
+              disabled={isProcessing}
+              className="w-full h-14 px-6 rounded-lg bg-[#326DEC] text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center hover:scale-[1.02] hover:shadow-[#326DEC]/20 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isProcessing ? (
-                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                <>
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                  Processing...
+                </>
               ) : (
-                <UploadCloud className="mr-2 h-5 w-5" />
+                <>
+                  <ArrowUpRight className="mr-2 h-5 w-5" />
+                  Process New Statement
+                </>
               )}
-              Process New Statement
-              <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
+
             <Button
               onClick={loadTransactions}
-              disabled={isLoading || isProcessing}
-              className="w-full h-14 px-6 rounded-lg bg-[#326DEC] text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-[#326DEC]/20"
+              disabled={isLoading}
+              className="w-full h-14 px-6 rounded-lg bg-[#326DEC] text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center hover:scale-[1.02] hover:shadow-[#326DEC]/20 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <Loader2 className={cn("mr-2 h-5 w-5", isLoading && "animate-spin")} />
-              Load Uncategorised Transactions
-              <ArrowRight className="ml-2 h-5 w-5" />
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                  Loading...
+                </>
+              ) : (
+                <>
+                  <ListX className="mr-2 h-5 w-5" />
+                  Load Uncategorised Transactions
+                </>
+              )}
             </Button>
+
             <Button
-              onClick={() => {
-                setIsDialogOpen(true);
-                loadAllTransactions();
-              }}
-              className="w-full h-14 px-6 rounded-lg bg-[#326DEC] text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-[#326DEC]/20"
+              onClick={loadAllTransactions}
+              disabled={isLoadingAll}
+              className="w-full h-14 px-6 rounded-lg bg-[#326DEC] text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center hover:scale-[1.02] hover:shadow-[#326DEC]/20 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <ListX className="mr-2 h-5 w-5" />
-              View All Transactions
-              <ArrowRight className="ml-2 h-5 w-5" />
+              {isLoadingAll ? (
+                <>
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                  Loading...
+                </>
+              ) : (
+                <>
+                  <ListX className="mr-2 h-5 w-5" />
+                  View All Transactions
+                </>
+              )}
             </Button>
+
+            <div className="relative">
+              <input
+                type="file"
+                id="statement-upload"
+                className="hidden"
+                accept=".csv,.xlsx,.xls"
+                onChange={handleFileUpload}
+              />
+              <Button
+                onClick={() => document.getElementById('statement-upload')?.click()}
+                disabled={isProcessing}
+                className="w-full h-14 px-6 rounded-lg bg-[#326DEC] text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center hover:scale-[1.02] hover:shadow-[#326DEC]/20 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isProcessing ? (
+                  <>
+                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                    Uploading...
+                  </>
+                ) : (
+                  <>
+                    <FileUp className="mr-2 h-5 w-5" />
+                    Upload Statement
+                  </>
+                )}
+              </Button>
+            </div>
           </div>
 
           <div className="mb-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -467,6 +551,10 @@ export default function ledgerpointPage() {
                 </div>
               </div>
             </div>
+          </div>
+
+          <div className="mb-8">
+            <CategoryRulesManager />
           </div>
 
           <div className="relative">
