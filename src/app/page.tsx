@@ -403,7 +403,7 @@ export default function LedgerPointPage() {
           <h1 className="font-headline text-6xl sm:text-7xl font-bold bg-gradient-to-r from-[#7B61FF] to-[#00C9FF] bg-clip-text text-transparent mb-4 tracking-wide">
             LedgerPoint
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto font-light">
+          <p className="text-lg text-slate-400 max-w-2xl mx-auto font-light">
             Smart transaction categorization powered by AI. Streamline your financial management with ease.
           </p>
         </header>
@@ -446,14 +446,14 @@ export default function LedgerPointPage() {
           </div>
 
           <div className="mb-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="flex items-center justify-center p-4 rounded-lg bg-gray-100/30 backdrop-blur-sm border border-gray-300/30">
+            <div className="flex items-center justify-center p-4 rounded-lg bg-gray-800/30 backdrop-blur-sm border border-gray-300/30">
               <div className="flex items-center space-x-3">
                 <div className="bg-[#7B61FF]/20 p-2 rounded-full">
                   <CheckCircle className="h-5 w-5 text-[#7B61FF]" />
                 </div>
                 <div>
-                  <span className="text-sm text-gray-600">Categorized</span>
-                  <p className="text-lg font-semibold text-gray-800">{categorizedTransactions.length}</p>
+                  <span className="text-sm text-slate-400">Categorized</span>
+                  <p className="text-lg font-semibold text-slate-200">{categorizedTransactions.length}</p>
                 </div>
               </div>
             </div>
@@ -466,7 +466,7 @@ export default function LedgerPointPage() {
           <div className="relative">
             {isLoading ? (
               <div className="space-y-4">
-                <Card className="shadow-xl border-0 bg-gray-100/30 backdrop-blur-sm">
+                <Card className="shadow-xl border-0 bg-gray-800/30 backdrop-blur-sm">
                   <CardHeader>
                     <Skeleton className="h-6 w-3/4 mb-2" />
                     <Skeleton className="h-4 w-1/4" />
@@ -494,13 +494,13 @@ export default function LedgerPointPage() {
                 </div>
               </div>
             ) : (
-              <Card className="shadow-xl border-0 bg-gray-100/30 backdrop-blur-sm text-center py-16 text-gray-800">
+              <Card className="shadow-xl border-0 bg-gray-800/30 backdrop-blur-sm text-center py-16 text-slate-200">
                 <CardContent className="flex flex-col items-center justify-center">
                   <div className="bg-[#7B61FF]/20 rounded-full p-4 mb-6">
                     <ListX className="h-12 w-12 text-[#7B61FF]" />
                   </div>
-                  <h2 className="text-2xl font-semibold text-gray-800 mb-3">No Transactions to Categorize</h2>
-                  <p className="text-gray-600 max-w-sm mb-6">
+                  <h2 className="text-2xl font-semibold text-slate-100 mb-3">No Transactions to Categorize</h2>
+                  <p className="text-slate-400 max-w-sm mb-6">
                     Click "Load Uncategorised Transactions" above to load new transactions for categorization.
                   </p>
                 </CardContent>
@@ -509,13 +509,13 @@ export default function LedgerPointPage() {
           </div>
 
           {categorizedTransactions.length > 0 && (
-            <div className="mt-8 p-6 bg-gray-100/30 backdrop-blur-sm rounded-lg shadow-lg border border-gray-300/30 text-gray-800">
+            <div className="mt-8 p-6 bg-gray-800/30 backdrop-blur-sm rounded-lg shadow-lg border border-gray-700/30 text-slate-200">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-800 mb-1">
+                  <h3 className="text-lg font-semibold text-slate-100 mb-1">
                     Ready to Save
                   </h3>
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-slate-400 text-sm">
                     {categorizedTransactions.length} transactions categorized
                   </p>
                 </div>
@@ -536,7 +536,7 @@ export default function LedgerPointPage() {
           </div>
 
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto bg-white border-gray-300/30">
+            <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto bg-[#1A1D24] border-gray-700/30">
               <DialogHeader>
                 <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-[#7B61FF] to-[#00C9FF] bg-clip-text text-transparent">
                   All Transactions
@@ -545,8 +545,8 @@ export default function LedgerPointPage() {
 
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <h2 className="text-xl font-semibold text-gray-800">All Transactions</h2>
-                  <Button
+                  <h2 className="text-xl font-semibold text-slate-200">All Transactions</h2>
+                  <Button 
                     onClick={handleSaveCategories}
                     disabled={Object.keys(editedTransactions).length === 0}
                     className="bg-[#7B61FF] hover:bg-[#6B51EF] text-white"
@@ -556,16 +556,16 @@ export default function LedgerPointPage() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   <div className="space-y-2">
-                    <Label className="text-gray-800">Month</Label>
+                    <Label className="text-slate-200">Month</Label>
                     <Select
                       value={selectedMonth}
                       onValueChange={setSelectedMonth}
                     >
-                      <SelectTrigger className="w-full bg-transparent border-gray-300/30 text-gray-800 hover:bg-gray-200/30">
+                      <SelectTrigger className="w-full bg-transparent border-gray-700/30 text-slate-200 hover:bg-gray-700/30">
                         <SelectValue placeholder="Select month" />
                       </SelectTrigger>
-                      <SelectContent
-                        className="bg-gray-100 border-gray-300/30 max-h-[200px] overflow-y-auto"
+                      <SelectContent 
+                        className="bg-gray-800 border-gray-700/30 max-h-[200px] overflow-y-auto"
                         position="popper"
                         side="bottom"
                         align="start"
@@ -582,16 +582,16 @@ export default function LedgerPointPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label className="text-gray-800">Category</Label>
+                    <Label className="text-slate-200">Category</Label>
                     <Select
                       value={selectedCategory}
                       onValueChange={setSelectedCategory}
                     >
-                      <SelectTrigger className="w-full bg-transparent border-gray-300/30 text-gray-800 hover:bg-gray-200/30">
+                      <SelectTrigger className="w-full bg-transparent border-gray-700/30 text-slate-200 hover:bg-gray-700/30">
                         <SelectValue placeholder="Select category" />
                       </SelectTrigger>
-                      <SelectContent
-                        className="bg-gray-100 border-gray-300/30 max-h-[200px] overflow-y-auto"
+                      <SelectContent 
+                        className="bg-gray-800 border-gray-700/30 max-h-[200px] overflow-y-auto"
                         position="popper"
                         side="bottom"
                         align="start"
@@ -608,16 +608,16 @@ export default function LedgerPointPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label className="text-gray-800">Mode</Label>
+                    <Label className="text-slate-200">Mode</Label>
                     <Select
                       value={selectedMode}
                       onValueChange={setSelectedMode}
                     >
-                      <SelectTrigger className="w-full bg-transparent border-gray-300/30 text-gray-800 hover:bg-gray-200/30">
+                      <SelectTrigger className="w-full bg-transparent border-gray-700/30 text-slate-200 hover:bg-gray-700/30">
                         <SelectValue placeholder="Select mode" />
                       </SelectTrigger>
-                      <SelectContent
-                        className="bg-gray-100 border-gray-300/30 max-h-[200px] overflow-y-auto"
+                      <SelectContent 
+                        className="bg-gray-800 border-gray-700/30 max-h-[200px] overflow-y-auto"
                         position="popper"
                         side="bottom"
                         align="start"
@@ -633,74 +633,83 @@ export default function LedgerPointPage() {
                     </Select>
                   </div>
 
-                  <div className="space-y-2">
-                    <Label className="text-gray-800">Date Range</Label>
+            <div className="space-y-2">
+                    <Label className="text-slate-200">Date Range</Label>
                     <div className="grid grid-cols-2 gap-2">
                       <Input
                         type="date"
                         value={startDate}
                         onChange={(e) => setStartDate(e.target.value)}
-                        className="bg-transparent border-gray-300/30 text-gray-800 hover:bg-gray-200/30"
+                        className="bg-transparent border-gray-700/30 text-slate-200 hover:bg-gray-700/30"
                       />
-                      <Input
+                <Input
                         type="date"
                         value={endDate}
                         onChange={(e) => setEndDate(e.target.value)}
-                        className="bg-transparent border-gray-300/30 text-gray-800 hover:bg-gray-200/30"
+                        className="bg-transparent border-gray-700/30 text-slate-200 hover:bg-gray-700/30"
                       />
                     </div>
                   </div>
                 </div>
-                <div className="border border-gray-300/30 rounded-lg overflow-hidden">
+                <div className="border border-gray-700/30 rounded-lg overflow-hidden">
                   <div className="overflow-x-auto">
                     <table className="w-full">
                       <thead>
-                        <tr className="border-b border-gray-300/30">
-                          <th className="px-4 py-2 text-left text-sm font-semibold text-gray-800">Date</th>
-                          <th className="px-4 py-2 text-left text-sm font-semibold text-gray-800">Description</th>
-                          <th className="px-4 py-2 text-left text-sm font-semibold text-gray-800">Mode</th>
-                          <th className="px-4 py-2 text-left text-sm font-semibold text-gray-800">Category</th>
-                          <th className="px-4 py-2 text-left text-sm font-semibold text-gray-800">Subcategory</th>
-                          <th className="px-4 py-2 text-right text-sm font-semibold text-gray-800">Amount</th>
-                          <th className="px-4 py-2 text-center text-sm font-semibold text-gray-800">Actions</th>
+                        <tr className="border-b border-gray-700/30">
+                          <th className="px-4 py-2 text-left text-sm font-semibold text-slate-200">Date</th>
+                          <th className="px-4 py-2 text-left text-sm font-semibold text-slate-200">Description</th>
+                          <th className="px-4 py-2 text-left text-sm font-semibold text-slate-200">Mode</th>
+                          <th className="px-4 py-2 text-left text-sm font-semibold text-slate-200">Category</th>
+                          <th className="px-4 py-2 text-left text-sm font-semibold text-slate-200">Subcategory</th>
+                          <th className="px-4 py-2 text-right text-sm font-semibold text-slate-200">Amount</th>
+                          <th className="px-4 py-2 text-center text-sm font-semibold text-slate-200">Actions</th>
                         </tr>
                       </thead>
                       <tbody>
                         {isLoadingAll ? (
                           <tr>
-                            <td colSpan={7} className="px-4 py-8 text-center text-gray-600">
+                            <td colSpan={7} className="px-4 py-8 text-center text-slate-400">
                               <div className="flex items-center justify-center space-x-2">
                                 <Loader2 className="h-5 w-5 animate-spin" />
                                 <span>Loading transactions...</span>
                               </div>
                             </td>
                           </tr>
-                        ) : getFilteredTransactions().length > 0 ? (
+                        ) : getFilteredTransactions().length === 0 ? (
+                          <tr>
+                            <td colSpan={7} className="px-4 py-8 text-center text-slate-400">
+                              No transactions found
+                            </td>
+                          </tr>
+                        ) : (
                           getFilteredTransactions().map((transaction) => (
-                            <tr key={transaction.row_number} className="border-b border-gray-300/30 hover:bg-gray-200/30">
-                              <td className="px-4 py-2 text-sm text-gray-800">{transaction.date}</td>
-                              <td className="px-4 py-2 text-sm text-gray-800">{transaction.description}</td>
-                              <td className="px-4 py-2 text-sm text-gray-800">{transaction.mode || '-'}</td>
+                            <tr key={transaction.row_number} className="border-b border-gray-700/30 hover:bg-gray-700/30">
+                              <td className="px-4 py-2 text-sm text-slate-200">{transaction.date}</td>
+                              <td className="px-4 py-2 text-sm text-slate-200">{transaction.description}</td>
+                              <td className="px-4 py-2 text-sm text-slate-200">{transaction.mode || '-'}</td>
                               <td className="px-4 py-2 text-sm">
                                 <Select
                                   value={editedTransactions[transaction.row_number]?.category || transaction.category || ''}
                                   onValueChange={(value) => handleCategoryChange(transaction.row_number, value)}
                                 >
-                                  <SelectTrigger className="w-[180px] bg-transparent border-gray-300/30 text-gray-800 hover:bg-gray-200/30">
+                                  <SelectTrigger className="w-[180px] bg-transparent border-gray-700/30 text-slate-200 hover:bg-gray-700/30">
                                     <SelectValue>
                                       {editedTransactions[transaction.row_number]?.category || transaction.category || '-'}
                                     </SelectValue>
                                   </SelectTrigger>
-                                  <SelectContent
-                                    className="bg-gray-100 border-gray-300/30 max-h-[200px] overflow-y-auto"
+                                  <SelectContent 
+                                    className="bg-gray-800 border-gray-700/30 max-h-[200px] overflow-y-auto"
                                     position="popper"
                                     side="bottom"
                                     align="start"
                                     sideOffset={4}
                                   >
-                                    <SelectItem value="">-</SelectItem>
                                     {CATEGORIES.map((category) => (
-                                      <SelectItem key={category} value={category}>
+                                      <SelectItem 
+                                        key={category} 
+                                        value={category}
+                                        className="text-slate-200 hover:bg-gray-700/30"
+                                      >
                                         {category}
                                       </SelectItem>
                                     ))}
@@ -711,46 +720,51 @@ export default function LedgerPointPage() {
                                 <Select
                                   value={editedTransactions[transaction.row_number]?.subcategory || transaction.subcategory || ''}
                                   onValueChange={(value) => handleSubcategoryChange(transaction.row_number, value)}
+                                  disabled={!editedTransactions[transaction.row_number]?.category && !transaction.category}
                                 >
-                                  <SelectTrigger className="w-[180px] bg-transparent border-gray-300/30 text-gray-800 hover:bg-gray-200/30">
+                                  <SelectTrigger className="w-[180px] bg-transparent border-gray-700/30 text-slate-200 hover:bg-gray-700/30">
                                     <SelectValue>
                                       {editedTransactions[transaction.row_number]?.subcategory || transaction.subcategory || '-'}
                                     </SelectValue>
                                   </SelectTrigger>
-                                  <SelectContent
-                                    className="bg-gray-100 border-gray-300/30 max-h-[200px] overflow-y-auto"
+                                  <SelectContent 
+                                    className="bg-gray-800 border-gray-700/30 max-h-[200px] overflow-y-auto"
                                     position="popper"
                                     side="bottom"
                                     align="start"
                                     sideOffset={4}
                                   >
-                                    <SelectItem value="">-</SelectItem>
-                                    {SUBCATEGORIES[(editedTransactions[transaction.row_number]?.category || transaction.category) as Category]?.map((subcategory) => (
-                                      <SelectItem key={subcategory} value={subcategory}>
-                                        {subcategory}
-                                      </SelectItem>
-                                    ))}
+                                    {(editedTransactions[transaction.row_number]?.category || transaction.category) && 
+                                      SUBCATEGORIES[(editedTransactions[transaction.row_number]?.category || transaction.category) as Category]?.map((subcategory) => (
+                                        <SelectItem 
+                                          key={subcategory} 
+                                          value={subcategory}
+                                          className="text-slate-200 hover:bg-gray-700/30"
+                                        >
+                                          {subcategory}
+                                        </SelectItem>
+                                      ))}
                                   </SelectContent>
                                 </Select>
                               </td>
-                              <td className="px-4 py-2 text-right text-sm font-semibold text-gray-800">₹{transaction.debit_amount || transaction.credit_amount}</td>
-                              <td className="px-4 py-2 text-center">
-                                <Button
-                                  onClick={() => handleUpdateTransaction(transaction.row_number)}
-                                  disabled={!editedTransactions[transaction.row_number]}
-                                  className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md text-xs"
-                                >
-                                  Update
-                                </Button>
+                              <td className="px-4 py-2 text-sm text-right text-slate-200">
+                                {transaction.debit_amount > 0 
+                                  ? `-₹${transaction.debit_amount.toFixed(2)}` 
+                                  : `+₹${transaction.credit_amount}`}
+                              </td>
+                              <td className="px-4 py-2 text-sm text-center">
+                                {editedTransactions[transaction.row_number] && (
+                <Button 
+                                    onClick={() => handleUpdateTransaction(transaction.row_number)}
+                                    size="sm"
+                                    className="bg-[#7B61FF] hover:bg-[#6B51EF] text-white"
+                                  >
+                                    Update
+                </Button>
+                                )}
                               </td>
                             </tr>
                           ))
-                        ) : (
-                          <tr>
-                            <td colSpan={7} className="px-4 py-8 text-center text-gray-600">
-                              No transactions match the selected filters.
-                            </td>
-                          </tr>
                         )}
                       </tbody>
                     </table>
