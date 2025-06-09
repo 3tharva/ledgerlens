@@ -6,7 +6,8 @@ export const API_ENDPOINTS = {
   SAVE_CATEGORY_RULES: `${API_BASE_URL}/saveCat`,
   UPDATE_CATEGORIZED_TRANSACTIONS: `${API_BASE_URL}/updateCategorizedTransactions`,
   GET_UNCATEGORIZED_TRANSACTIONS: `${API_BASE_URL}/getUncategorizedTransactions`,
-  PROCESS_STATEMENT: `${API_BASE_URL}/processNew`
+  PROCESS_STATEMENT: `${API_BASE_URL}/processNew`,
+  SAVE_URL: `${API_BASE_URL}/saveUrl`
 } as const;
 
 const defaultHeaders = {

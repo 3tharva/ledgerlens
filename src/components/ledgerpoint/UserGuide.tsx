@@ -68,6 +68,28 @@ export function UserGuide() {
             </p>
           </div>
         </div>
+        <div className="flex items-start space-x-4">
+          <div className="bg-gray-700/50 rounded-lg p-3">
+            <UploadCloud className="h-6 w-6 text-[#e0aaff]" />
+          </div>
+          <div>
+            <h3 className="font-semibold text-slate-200 mb-1">6. Load Uncategorised Transactions</h3>
+            <p className="text-sm text-slate-400">
+              Click 'Load Uncategorised Transactions' to load new transactions for categorization.
+            </p>
+          </div>
+        </div>
+        <div className="flex items-start space-x-4">
+          <div className="bg-gray-700/50 rounded-lg p-3">
+            <Rows className="h-6 w-6 text-[#e0aaff]" />
+          </div>
+          <div>
+            <h3 className="font-semibold text-slate-200 mb-1">7. View All Transactions</h3>
+            <p className="text-sm text-slate-400">
+              To view all transactions, click the 'View All Transactions' button. This opens a dialog where you can filter transactions by month, category, mode, and date range.
+            </p>
+          </div>
+        </div>
       </CardContent>
     </Card>
   );

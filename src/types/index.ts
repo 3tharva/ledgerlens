@@ -44,3 +44,21 @@ export const CATEGORIES = [
 ] as const;
 
 export type Category = typeof CATEGORIES[number];
+
+export const SUBCATEGORIES: Record<Category, string[]> = {
+  "Groceries": ["Supermarket", "Local Market", "Online Grocery"],
+  "Dining Out": ["Restaurant", "Cafe", "Fast Food", "Food Delivery"],
+  "Transport": ["Public Transport", "Taxi", "Fuel", "Maintenance"],
+  "Utilities": ["Electricity", "Water", "Gas", "Internet", "Phone"],
+  "Housing": ["Rent", "Mortgage", "Maintenance", "Furniture"],
+  "Entertainment": ["Movies", "Streaming", "Games", "Events"],
+  "Healthcare": ["Doctor", "Pharmacy", "Insurance", "Fitness"],
+  "Apparel": ["Clothing", "Shoes", "Accessories"],
+  "Travel": ["Flights", "Hotels", "Local Transport", "Activities"],
+  "Education": ["Tuition", "Books", "Courses", "Supplies"],
+  "Income": ["Salary", "Freelance", "Investments", "Gifts"],
+  "Gifts/Donations": ["Charity", "Personal Gifts", "Tips"],
+  "Personal Care": ["Haircut", "Beauty", "Spa", "Cosmetics"],
+  "Subscriptions": ["Software", "Memberships", "Services"],
+  "Miscellaneous": ["Other"]
+};
