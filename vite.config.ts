@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 9002,
+    allowedHosts: ['db5a-106-219-149-133.ngrok-free.app'],
   },
   resolve: {
     alias: {
